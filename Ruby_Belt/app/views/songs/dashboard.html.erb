@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DojoMusicHub</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<h1>Welcome, <%= @user.first_name %> <%= @user.last_name %>!</h1>
+	<a href="/users/logout" data-method="delete">Logout</a>
+	<% if flash[:notice] %>
+		<%= flash[:notice] %>
+	<% end %>
+	<h2>All the songs in our hub</h2>
+	<div>
+		<table>
+			<thead>
+				<tr>
+					<td>Artist</td>
+					<td>Title</td>
+					<td>Number of Times Song Has been Added</td>
+					<td>Add to Playlist</td>
+				</tr>
+			</thead>
+			<tbody>
+				<% @songs.each do |song| %>
+					<tr><td><%= song.artist %></td><td><a href="/songs/<%= song.id %>"><%= song.title %></a></td><td><%= song.times_added %></td><td><form action="/songs/add/<%= song.id %>" method="post"><input name="authenticity_token" value="form_authenticity_token" type="hidden"><input type="submit" value="Add"></form></td></tr>
+				<% end %>
+			</tbody>
+		</table>
+		<form action="/songs/create" method="POST">
+			<input name="authenticity_token" value="form_authenticity_token" type="hidden">
+			<p><label>Title</label><input type="text" name="song[title]"></p>
+			<p><label>Artist</label><input type="text" name="song[artist]"></p>
+			<p><input type="submit" name="create" value="Create"></p>
+		</form>
+	</div>
+</body>
+</html>
